@@ -1,0 +1,21 @@
+{
+  "name": "nestjs-rabbitmq",
+  "version": "0.1.0",
+  "description": "rabbitmq module for nest.js",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest --forceExit --detectOpenHandles"
+  },
+  "keywords": [
+    "rabbitmq"
+  ],
+  "author": "hu.guihai@qq.com",
+  "license": "MIT",
+  "dependencies": {
+    "@nestjs/common": "^7.0.7",
+    "amqp-connection-manager": "^3.2.0"
+  }
+}
