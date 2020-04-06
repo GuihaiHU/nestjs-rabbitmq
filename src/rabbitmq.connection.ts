@@ -23,6 +23,10 @@ export class RabbitmqConnection implements OnModuleInit {
     this._connection = connection;
   }
 
+  get connection(): AmqpConnectionManager {
+    return this._connection;
+  }
+
   async onModuleInit() {
     if (!this._hasInit) {
       this._hasInit = true;
