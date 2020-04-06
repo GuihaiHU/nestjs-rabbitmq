@@ -2,7 +2,7 @@ import { Module, OnModuleInit, OnModuleDestroy, DynamicModule, Global } from '@n
 import { RabbitmqService } from './rabbitmq.service';
 import { RabbitmqConnectionOption } from './rabbitmq.options';
 import { getRabbitmqConnectionToken, getRabbitmqConnectionOptionsToken } from './utils';
-import { rabbitmqConnectionFactory } from './rabbitmq.providers';
+import { rabbitmqConnectionFactory } from './rabbitmq.provider';
 import { RabbitmqContainer } from './rabbitmq.container';
 import { RabbitmqConnection } from './rabbitmq.connection';
 import { DiscoveryModule } from '@golevelup/nestjs-discovery';
