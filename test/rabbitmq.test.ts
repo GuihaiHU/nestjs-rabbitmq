@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { RabbitmqModule } from '@app/nestjs-rabbitmq';
+import { RabbitmqModule } from '@app/rabbitmq';
 
 describe('测试rabbitmq', () => {
-  it('模块导入', async done => {
+  it('模块导入', async (done) => {
     @Injectable()
     class TestService {}
 
