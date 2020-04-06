@@ -5,9 +5,11 @@ import { getRabbitmqConnectionToken, getRabbitmqConnectionOptionsToken } from '.
 import { rabbitmqConnectionFactory } from './rabbitmq.providers';
 import { RabbitmqContainer } from './rabbitmq.container';
 import { RabbitmqConnection } from './rabbitmq.connection';
+import { DiscoveryModule } from '@nestjs/core';
 
 @Global()
 @Module({
+  imports: [DiscoveryModule],
   providers: [RabbitmqService],
   exports: [RabbitmqService],
 })
