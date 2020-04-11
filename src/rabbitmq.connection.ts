@@ -64,7 +64,10 @@ export class RabbitmqConnection implements OnModuleInit {
             exchangeOption.type,
             exchangeOption.options,
           );
-          const assertQueue: Replies.AssertQueue = await channel.assertQueue(queueOptions.name, queueOptions.options);
+          const assertQueue: Replies.AssertQueue = await channel.assertQueue(
+            queueOptions.name || exchangeOption.name + routerKey,
+            queueOptions.options,
+          );
           await channel.bindQueue(assertQueue.queue, assertExchange.exchange, routerKey);
           await channel.consume(assertQueue.queue, message => {
             const content = JSON.parse(message.content.toString());
