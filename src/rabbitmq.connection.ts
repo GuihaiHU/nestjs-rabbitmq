@@ -35,10 +35,10 @@ export class RabbitmqConnection implements OnModuleInit {
   }
 
   async registerSubscribe() {
-    const subscribMethods = await this.discoveryService.providerMethodsWithMetaAtKey(
+    const subscribeMethods = await this.discoveryService.providerMethodsWithMetaAtKey(
       RABBITMQ_SUBSCRIBE_EXCHANGE_OPTIONS_TOKEN,
     );
-    for (const method of subscribMethods) {
+    for (const method of subscribeMethods) {
       const originalHandler = method.discoveredMethod.handler;
 
       let exchangeOption: ExchangeOption;
