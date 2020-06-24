@@ -5,7 +5,7 @@ import { DiscoveryService } from '@golevelup/nestjs-discovery';
 import {
   RABBITMQ_SUBSCRIBE_QUEUE_OPTIONS_TOKEN,
   RABBITMQ_SUBSCRIBE_EXCHANGE_OPTIONS_TOKEN,
-  RABBITMQ_SUBSCRIBE_EXCHANGE_ROUTERKEY_TOKEN,
+  RABBITMQ_SUBSCRIBE_EXCHANGE_ROUTINGKEY_TOKEN,
 } from './rabbitmq.constants';
 import { Logger } from '@nestjs/common';
 import { ExchangeOption, QueueOption } from './rabbitmq.options';
@@ -41,46 +41,50 @@ export class RabbitmqConnection implements OnModuleInit {
     for (const method of subscribeMethods) {
       const originalHandler = method.discoveredMethod.handler;
 
-      let exchangeOption: ExchangeOption;
-      const _exchangeOption: ExchangeOption | string = Reflect.getMetadata(
+      let exchangeOption: ExchangeOption = Reflect.getMetadata(
         RABBITMQ_SUBSCRIBE_EXCHANGE_OPTIONS_TOKEN,
         originalHandler,
       );
-      exchangeOption = typeof _exchangeOption === 'string' ? { name: _exchangeOption } : _exchangeOption;
+      exchangeOption = typeof exchangeOption === 'string' ? { name: exchangeOption } : exchangeOption;
       exchangeOption.type = exchangeOption.type || 'topic';
       exchangeOption.options = exchangeOption.options || { durable: false };
 
-      const routerKey: string = Reflect.getMetadata(RABBITMQ_SUBSCRIBE_EXCHANGE_ROUTERKEY_TOKEN, originalHandler);
+      const routingKey: string = Reflect.getMetadata(RABBITMQ_SUBSCRIBE_EXCHANGE_ROUTINGKEY_TOKEN, originalHandler);
       let queueOptions: QueueOption = Reflect.getMetadata(RABBITMQ_SUBSCRIBE_QUEUE_OPTIONS_TOKEN, originalHandler);
-      if (!queueOptions) {
-        queueOptions = {};
-      }
-      queueOptions.options = Object.assign({ exclusive: true }, queueOptions.options);
+      queueOptions = typeof queueOptions === 'string' ? { name: queueOptions } : !queueOptions ? {} : queueOptions;
       const $channel = this._connection.createChannel({
         json: true,
-        setup: async function(channel: ConfirmChannel) {
-          const assertExchange: Replies.AssertExchange = await channel.assertExchange(
-            exchangeOption.name,
-            exchangeOption.type,
-            exchangeOption.options,
-          );
-          const assertQueue: Replies.AssertQueue = await channel.assertQueue(
-            queueOptions.name || exchangeOption.name + routerKey,
-            queueOptions.options,
-          );
-          await channel.bindQueue(assertQueue.queue, assertExchange.exchange, routerKey);
-          await channel.consume(assertQueue.queue, message => {
-            const content = JSON.parse(message.content.toString());
-            originalHandler
-              .call(method.discoveredMethod.parentClass.instance, content)
-              .then(() => {
-                channel.ack(message);
-              })
-              .catch(error => {
-                console.error(error);
-                channel.ack(message);
-              });
-          });
+        setup: async (channel: ConfirmChannel) => {
+          try {
+            const assertExchange: Replies.AssertExchange = await channel.assertExchange(
+              exchangeOption.name,
+              exchangeOption.type,
+              exchangeOption.options,
+            );
+            let assertQueue: Replies.AssertQueue;
+            assertQueue = await channel.assertQueue(
+              queueOptions.name || exchangeOption.name + routingKey,
+              queueOptions.options,
+            );
+            await channel.bindQueue(assertQueue.queue, assertExchange.exchange, routingKey);
+            await channel.consume(assertQueue.queue, message => {
+              this._logger.log(
+                `send message from exchange[${message.fields.exchange}] to comsumer[${originalHandler.name}] via routingKey[${message.fields.routingKey}]`,
+              );
+              const content = JSON.parse(message.content.toString());
+              originalHandler
+                .call(method.discoveredMethod.parentClass.instance, content, message.fields, message.properties)
+                .then(() => {
+                  channel.ack(message);
+                })
+                .catch(error => {
+                  this._logger.error(error);
+                  channel.ack(message);
+                });
+            });
+          } catch (error) {
+            this._logger.error(error);
+          }
         },
       });
       await $channel.waitForConnect();
@@ -92,7 +96,7 @@ export class RabbitmqConnection implements OnModuleInit {
 
   async publish(
     optionOrName: ExchangeOption | string,
-    routerKey: string,
+    routingKey: string,
     content: any,
     publishOptions?: Options.Publish,
   ) {
@@ -110,7 +114,7 @@ export class RabbitmqConnection implements OnModuleInit {
       });
       await this._publishChannels[exchangeOption.name].waitForConnect();
     }
-    this._publishChannels[exchangeOption.name].publish(exchangeOption.name, routerKey, content, publishOptions);
+    this._publishChannels[exchangeOption.name].publish(exchangeOption.name, routingKey, content, publishOptions);
   }
 
   async close() {
