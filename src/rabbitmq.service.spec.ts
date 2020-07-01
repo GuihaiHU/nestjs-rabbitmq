@@ -1,18 +1,18 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { RabbitmqService } from './rabbitmq.service';
+// import { Test, TestingModule } from '@nestjs/testing';
+// import { RabbitmqService } from './rabbitmq.service';
 
-describe('NestjsRabbitmqService', () => {
-  let service: RabbitmqService;
+// describe('NestjsRabbitmqService', () => {
+//   let service: RabbitmqService;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [RabbitmqService],
-    }).compile();
+//   beforeEach(async () => {
+//     const module: TestingModule = await Test.createTestingModule({
+//       providers: [RabbitmqService],
+//     }).compile();
 
-    service = module.get<RabbitmqService>(RabbitmqService);
-  });
+//     service = module.get<RabbitmqService>(RabbitmqService);
+//   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-});
+//   it('should be defined', () => {
+//     expect(service).toBeDefined();
+//   });
+// });

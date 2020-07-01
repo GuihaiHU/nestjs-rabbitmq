@@ -1,8 +1,8 @@
 import { Module, OnModuleInit, OnModuleDestroy, DynamicModule, Global } from '@nestjs/common';
 import { RabbitmqService } from './rabbitmq.service';
-import { RabbitmqConnectionOption } from './rabbitmq.options';
+import { RabbitmqConnectionOption, RabbitmqAsyncConnectionOption } from './rabbitmq.options';
 import { getRabbitmqConnectionToken, getRabbitmqConnectionOptionsToken } from './utils';
-import { rabbitmqConnectionFactory } from './rabbitmq.provider';
+import { rabbitmqConnectionFactory, rabbitmqConnectionAsyncFactory } from './rabbitmq.provider';
 import { RabbitmqContainer } from './rabbitmq.container';
 import { RabbitmqConnection } from './rabbitmq.connection';
 import { DiscoveryModule } from '@golevelup/nestjs-discovery';
@@ -35,19 +35,20 @@ export class RabbitmqModule implements OnModuleInit, OnModuleDestroy {
     };
   }
 
-  // static registerAsync(options: RabbitmqAsyncConnectionOption): DynamicModule {
-  //   return {
-  //     module: RabbitmqModule,
-  //     providers: [
-  //       RabbitmqConnection,
-  //       {
-  //         provide: getRabbitmqConnectionOptionsToken(options.name),
-  //         inject: options['inject'],
-  //         useFactory: options.useFactory,
-  //       },
-  //       rabbitmqConnectionAsyncFactory(options.name),
-  //     ],
-  //     exports: [getRabbitmqConnectionToken(options.name), RabbitmqConnection],
-  //   };
-  // }
+  static registerAsync(options: RabbitmqAsyncConnectionOption): DynamicModule {
+    return {
+      module: RabbitmqModule,
+      imports: options.imports || [],
+      providers: [
+        RabbitmqConnection,
+        {
+          provide: getRabbitmqConnectionOptionsToken(options.name),
+          inject: options['inject'],
+          useFactory: options.useFactory,
+        },
+        rabbitmqConnectionAsyncFactory(options.name),
+      ],
+      exports: [getRabbitmqConnectionToken(options.name), RabbitmqConnection],
+    };
+  }
 }

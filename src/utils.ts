@@ -11,7 +11,7 @@ export function getRabbitmqConnectionToken(token: string | symbol = RABBITMQ_CON
   }
 }
 
-export function getRabbitmqConnectionOptionsToken(token: string | symbol = RABBITMQ_CONNECTION_TOKEN) {
+export function getRabbitmqConnectionOptionsToken(token: string | symbol = RABBITMQ_CONNECTION_OPTIONS_TOKEN) {
   if (token === RABBITMQ_CONNECTION_OPTIONS_TOKEN) {
     return RABBITMQ_CONNECTION_OPTIONS_TOKEN;
   } else if (!isSymbol(token)) {
