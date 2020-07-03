@@ -70,6 +70,7 @@ export function rabbitmqConnectionAsyncFactory(name: string): ConnectionFactoryP
         }, 500);
         setTimeout(() => {
           if (!hasConnect) {
+            clearInterval(_intercal);
             reject('Rabbitmq not connect in 5 seconds. Please Check your connection options');
           }
         }, 5000);
