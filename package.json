@@ -1,6 +1,6 @@
 {
   "name": "nestjs-rabbitmq",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "rabbitmq module for nest.js",
   "main": "index.js",
   "directories": {
