@@ -11,8 +11,8 @@ export interface RabbitmqConnectionOption {
 
 export interface RabbitmqAsyncConnectionOption extends Pick<ModuleMetadata, 'imports'> {
   name?: string;
-  inject: FactoryProvider['inject'];
-  useFactory?: (...args: any[]) => RabbitmqConnectionOption | Promise<RabbitmqConnectionOption>;
+  inject?: FactoryProvider['inject'];
+  useFactory: (...args: any[]) => RabbitmqConnectionOption | Promise<RabbitmqConnectionOption>;
 }
 
 export interface ExchangeOption {
