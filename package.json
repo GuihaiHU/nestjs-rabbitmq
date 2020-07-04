@@ -1,12 +1,15 @@
 {
-  "name": "nestjs-rabbitmq",
-  "version": "1.0.0",
+  "name": "@sevenfifteen/nestjs-rabbitmq",
+  "version": "1.0.2",
   "description": "rabbitmq module for nest.js",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
+  "repository": "https://github.com/GuihaiHU/nestjs-rabbitmq.git",
   "scripts": {
+    "build": "tsc --build tsconfig.json",
+    "put": "cp package.json dist; cp README.md dist; cd dist; npm publish --access=public",
     "test:dev": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --forceExit --detectOpenHandles",
     "test": "jest --forceExit --detectOpenHandles"
   },
@@ -28,16 +31,18 @@
     ]
   },
   "keywords": [
-    "rabbitmq"
+    "rabbitmq",
+    "nestjs",
+    "amqp"
   ],
   "author": "hu.guihai@qq.com",
   "license": "MIT",
   "dependencies": {
     "@golevelup/nestjs-discovery": "^2.3.1",
-    "@nestjs/common": "^7.0.7",
-    "@nestjs/core": "^7.2.0",
-    "@nestjs/platform-express": "^7.2.0",
-    "@nestjs/testing": "^7.2.0",
+    "@nestjs/common": "^7.3.1",
+    "@nestjs/core": "^7.3.1",
+    "@nestjs/platform-express": "^7.3.1",
+    "@nestjs/testing": "^7.3.1",
     "amqp-connection-manager": "^3.2.0",
     "amqplib": "^0.5.6",
     "reflect-metadata": "^0.1.13",
