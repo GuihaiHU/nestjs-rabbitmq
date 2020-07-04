@@ -108,8 +108,8 @@ export class AppModule {}
 ## 消息订阅
 
 本模块通过`RabbitmqSubscribe(exchangeOption: string|ExchangeOption, routingKey: string, queueOption?: string|QueueOption)`轻松实现消息订阅，
-| 参数名 | 类型|描述 |
-| :----------------------------------: | :----------------------------------: |
+| 参数名 | 类型| 描述 |
+| :----------------------------------: | :--: |:----------------------------------: |
 | exchangeOption | string| exchange 名字 |
 | exchangeOption.name | string | exchange 名字 |
 | exchangeOption.type | string | exchange 类型，默认采用 topic 模式 |
@@ -147,7 +147,7 @@ class ProducerService {
 
 `RabbitmqConnection.publish`
 | 参数名 | 类型|描述 |
-| :----------------------------------: | :----------------------------------: |
+| :--------------------------:|:--------: | :----------------------------------: |
 | optionOrName | string| exchange 名字 |
 | exchangeOption.name | string | exchange 名字 |
 | exchangeOption.type | string | exchange 类型，默认采用 topic 模式 |
