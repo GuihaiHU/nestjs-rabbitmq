@@ -79,7 +79,7 @@ export class AppModule {}
 
 函数`registerAsync(options: RabbitmqAsyncConnectionOption): DynamicModule`
 | 参数名 | 必填 | 描述 |
-| :----------------------------------: |: --: |:----------------------------------: |
+| :----------------------------------: |:--:|:----------------------------------: |
 | options.name | N |rabbitmq 连接的名字 |
 | options.useFactory | Y | 返回`RabbitmqConnectionOption`的函数 |
 | options.inject | N | useFactory 的依赖注入 |
