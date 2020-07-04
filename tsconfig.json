@@ -12,5 +12,6 @@
     "incremental": true,
     "paths": {}
   },
-  "exclude": ["node_modules", "dist", "database"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
